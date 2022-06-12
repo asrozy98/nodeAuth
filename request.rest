@@ -1,0 +1,20 @@
+GET http://127.0.0.1:3000
+
+###
+POST http://127.0.0.1:3000/auth/register
+Content-Type: application/json
+
+{
+    "name": "test",
+    "email": "test@gmail.com",
+    "password": "12345678"
+}
+
+###
+POST http://127.0.0.1:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "test@gmail.com",
+    "password": "12345678"
+}
