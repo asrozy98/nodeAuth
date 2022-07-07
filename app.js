@@ -6,9 +6,12 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
+const db = require("./models/index");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 require("./config/authConfig")(passport);
+const dockerPort = process.env.NODE_DOCKER_PORT;
+const localPort = process.env.NODE_LOCAL_PORT;
 
 var app = express();
 
@@ -57,5 +60,22 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+
+(async () => {
+  try {
+    await db.sequelize.sync({ force: false });
+    app.listen(dockerPort, function () {
+      console.log(
+        "App listening on docker port " +
+          dockerPort +
+          " and local port " +
+          localPort +
+          "!"
+      );
+    });
+  } catch (error) {
+    console.error(error);
+  }
+})();
 
 module.exports = app;
